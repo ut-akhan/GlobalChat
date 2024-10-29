@@ -14,7 +14,7 @@ app.use(cookieParser());
 app.use(helmet());
 app.use(cors({
   credentials: true,
-  origin: 'http://localhost:5174',
+  origin: 'http://localhost:5173',
 }));
 app.use(xss());
 app.use(rateLimiter({

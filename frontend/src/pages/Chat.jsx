@@ -17,6 +17,13 @@ function Chat() {
   }
 
   useEffect(() => {
+    if (!user) {
+      navigate('/login'); // Redirect to login if user is not set
+      return;
+    }
+  }, [user, navigate]);
+
+  useEffect(() => {
     const fetchMessages = async () => {
       try {
         const response = await axios.get('http://localhost:2000/api/v1/texts', config); // Replace with your API endpoint

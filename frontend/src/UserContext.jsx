@@ -1,21 +1,28 @@
-import {createContext, useEffect, useState} from "react";
-import axios from "axios";
-import {data} from "autoprefixer";
+// src/UserContext.js
+import React, { createContext, useState, useEffect } from 'react';
+import Cookies from 'js-cookie';
 
-export const UserContext = createContext({});
+export const UserContext = createContext();
 
-export function UserContextProvider({children}) {
-  const [user,setUser] = useState(null);
+export const UserContextProvider = ({ children }) => {
+  const [user, setUser] = useState(() => {
+    // Try to get user from local storage or cookie
+    const storedUser = localStorage.getItem('user');
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
+
   useEffect(() => {
-    if (!user) {
-      axios.get('http://localhost:2000/api/v1/profile').then(({data}) => {
-        setUser(data);
-      });
+    // Save user to local storage whenever it changes
+    if (user) {
+      localStorage.setItem('user', JSON.stringify(user));
+    } else {
+      localStorage.removeItem('user');
     }
-  }, []);
+  }, [user]);
+
   return (
-    <UserContext.Provider value={{user,setUser}}>
+    <UserContext.Provider value={{ user, setUser }}>
       {children}
     </UserContext.Provider>
   );
-}
+};

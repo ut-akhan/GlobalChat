@@ -3,6 +3,7 @@ import React, { useContext, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../UserContext';
+import Cookies from 'js-cookie';
 
 function Home() {
   const [isLogin, setIsLogin] = useState(true);
@@ -23,6 +24,10 @@ function Home() {
         const response = await axios.post('http://localhost:2000/api/v1/auth/login', { email, password });
         setUser(response.data);
         console.log('Login response:', response.data);
+        // On successful login
+        setUser(response.data);  
+        Cookies.set('token', Cookies.get('token')); // Set the token in cookies if not already done
+        localStorage.setItem('user', JSON.stringify(response.data)); // Persist user data
         navigate('/texts');
       } else {
         // Handle registration
